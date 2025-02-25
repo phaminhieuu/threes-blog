@@ -41,7 +41,6 @@ export class Base {
     this.renderer.setPixelRatio( window.devicePixelRatio );
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     this.renderer.setAnimationLoop( this.tick.bind( this ) );
-    this.renderer.setClearColor( "var(--color-background)", 1 );
     document.body.appendChild( this.renderer.domElement );
 
     // Controls

@@ -14,9 +14,7 @@ export async function generateStaticParams() {
   const posts = getAllFilesFrontMatter();
 
   return posts.map((post) => ({
-    params: {
-      slug: post.slug,
-    },
+    slug: post.slug,
   }));
 }
 

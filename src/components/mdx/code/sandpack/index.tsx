@@ -1,0 +1,141 @@
+"use client";
+
+import {
+  SandpackCodeEditor,
+  SandpackConsole,
+  SandpackLayout,
+  type SandpackPredefinedTemplate,
+  SandpackPreview,
+  type SandpackThemeProp,
+} from "@codesandbox/sandpack-react";
+import { SandpackProvider } from "@codesandbox/sandpack-react";
+import Tabs, { type Tab } from "./components/tabs";
+import setupFiles from "./setup-files";
+import { useState } from "react";
+import { cn } from "@/lib/cn";
+
+interface Props {
+  template: SandpackPredefinedTemplate;
+  files?: Record<string, any>;
+  dependencies?: Record<string, string>;
+  autorun?: boolean;
+  defaultTab?: Tab;
+}
+
+export const theme: SandpackThemeProp = {
+  colors: {
+    surface1: "var(--color-background)",
+    surface2: "var(--color-border)",
+    surface3: "var(--color-background)",
+    accent: "var(--color-primary)",
+    error: "var(--color-destructive)",
+    errorSurface: "var(--color-background)",
+  },
+  syntax: {
+    plain: "var(--color-plain)",
+    comment: {
+      color: "var(--color-comment)",
+      fontStyle: "italic",
+    },
+    tag: "var(--color-primary)",
+    keyword: "var(--color-keyword)",
+    punctuation: "var(--color-punctuation)",
+    definition: "var(--color-function)",
+    property: "var(--color-primary)",
+    static: "var(--color-static)",
+    string: "var(--color-function)",
+  },
+  font: {
+    size: "14px",
+  },
+};
+
+const EDITOR_HEIGHT = 640;
+
+export default function Sandpack(props: Props) {
+  const {
+    template,
+    files,
+    dependencies,
+    autorun = true,
+    defaultTab = "preview",
+  } = props;
+
+  const [consoleKey, setConsoleKey] = useState(0);
+  const [tab, setTab] = useState<Tab>(defaultTab);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  return (
+    <div
+      className={cn("", {
+        "fixed inset-0 z-50": isFullScreen,
+        "relative lg:w-[calc(100%+320px)] lg:-mx-[160px]": !isFullScreen,
+      })}
+    >
+      <SandpackProvider
+        theme={theme}
+        template={template}
+        files={{
+          ...setupFiles,
+          ...files,
+        }}
+        customSetup={{
+          entry: "/index.html",
+          dependencies,
+        }}
+        options={{ autorun }}
+      >
+        <SandpackLayout
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          <div className="w-full flex flex-col lg:flex-row flex-nowrap overflow-hidden">
+            <div className="w-full lg:w-1/2">
+              <SandpackCodeEditor
+                showTabs
+                showLineNumbers
+                showInlineErrors
+                style={{
+                  width: "100%",
+                  height: isFullScreen ? "100vh" : EDITOR_HEIGHT,
+                }}
+              />
+            </div>
+
+            <div className="w-full lg:w-1/2 lg:border-l border-t lg:border-t-0 shrink-0">
+              <Tabs
+                currentTab={tab}
+                onTabChange={setTab}
+                onClear={() => setConsoleKey((prev) => prev + 1)}
+                onFullScreen={() => setIsFullScreen((prev) => !prev)}
+              />
+
+              <SandpackPreview
+                showRefreshButton={false}
+                showOpenInCodeSandbox={false}
+                style={{
+                  height: isFullScreen
+                    ? "calc(100vh - 42px)"
+                    : EDITOR_HEIGHT - 42,
+                  display: tab === "preview" ? "flex" : "none",
+                }}
+              />
+
+              <SandpackConsole
+                key={consoleKey}
+                showHeader
+                style={{
+                  height: isFullScreen
+                    ? "calc(100vh - 42px)"
+                    : EDITOR_HEIGHT - 42,
+                  display: tab === "console" ? "flex" : "none",
+                }}
+              />
+            </div>
+          </div>
+        </SandpackLayout>
+      </SandpackProvider>
+    </div>
+  );
+}

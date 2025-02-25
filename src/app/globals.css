@@ -1,42 +1,143 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: hsl(240 10% 3.9%);
+  --foreground: hsl(0 0% 98%);
+  --muted: hsl(240 3.7% 15.9%);
+  --muted-foreground: hsl(240 5% 63%);
+  --accent: hsl(240 3.7% 15.9%);
+  --accent-foreground: hsl(0 0% 98%);
+  --destructive: hsl(349, 89%, 72%);
+  --destructive-foreground: hsl(0 0% 98%);
+
+  --primary: hsl(221, 89%, 72%);
+  --warning: hsl(22, 100%, 70%);
+  --plain: hsl(229, 35%, 75%);
+  --comment: hsl(229, 23%, 44%);
+  --keyword: hsl(261, 85%, 79%);
+  --punctuation: hsl(229, 73%, 86%);
+  --function: hsl(189, 73%, 52%);
+  --static: hsl(171, 58%, 65%);
+  --terminal: hsl(229, 23%, 33%);
+
+  --border: hsl(240 3.7% 15.9%);
+  --input: hsl(240 3.7% 15.9%);
+  --ring: hsl(217 91% 40%);
+
+  --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-primary: var(--primary);
+  --color-warning: var(--warning);
+  --color-plain: var(--plain);
+  --color-comment: var(--comment);
+  --color-keyword: var(--keyword);
+  --color-punctuation: var(--punctuation);
+  --color-function: var(--function);
+  --color-static: var(--static);
+  --color-terminal: var(--terminal);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-inter: var(--font-inter);
+}
+
+@layer base {
+  * {
+    @apply border-border scroll-smooth scroll-mt-20;
+  }
+
+  body {
+    @apply bg-background text-foreground selection:bg-primary/20 selection:text-primary font-inter;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply rounded-md;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-md;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofi ll:active {
+    -webkit-transition-delay: 9999s;
+    transition-delay: 9999s;
   }
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+.bg-night {
+  background-image: linear-gradient(45deg,
+      hsl(240 10% 3.9%),
+      hsl(240 3.7% 15.9%),
+      hsl(240 10% 3.9%),
+      hsl(240 3.7% 15.9%));
+
+  background-size: 200% 100%;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.lucide {
+  stroke-width: 1px;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+.shiki {
+  counter-reset: step;
+  counter-increment: step 0;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+  .line {
+    &::before {
+      counter-increment: step;
+      @apply mx-4 inline-block w-4 border-transparent text-neutral-500 content-[counter(step)] text-[12px];
+    }
   }
+
+  .highlighted {
+    @apply bg-terminal/30 w-full inline-block relative;
+
+    &::after {
+      @apply absolute bg-primary h-full w-1 left-0 content-[''] top-0;
+    }
+  }
+}
+
+.sp-tabs {
+  background-image: linear-gradient(45deg,
+      hsl(240 10% 3.9%),
+      hsl(240 3.7% 15.9%),
+      hsl(240 10% 3.9%),
+      hsl(240 3.7% 15.9%));
+
+  background-size: 200% 100%;
+}
+
+.cm-gutterElement {
+  @apply text-[12px] opacity-100;
 }

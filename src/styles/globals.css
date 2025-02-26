@@ -67,7 +67,7 @@
   }
 
   body {
-    @apply bg-background text-foreground selection:bg-primary/20 selection:text-primary font-inter;
+    @apply bg-background text-foreground selection:bg-primary/20 selection:text-primary font-light;
   }
 
   /* width */

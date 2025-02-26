@@ -1,13 +1,12 @@
-const index = `import "./styles.css";
-import { Base } from "./base.ts";
-import * as THREE from "three";
+const index = `import { Base } from "./base.ts";
+import * as THREE from "three/webgpu";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 
 class App extends Base {
   constructor() {
     super();
 
-    const pointsNumber = 5000;
+    const pointsNumber = 3000;
     const goldenRatio = (1 + Math.sqrt(5)) / 2;
     const positions: number[][] = [];
     
@@ -22,12 +21,14 @@ class App extends Base {
       positions.push([x, y, z]);
     }
         
-    const dotMat = new THREE.ShaderMaterial();
+    const dotMat = new THREE.MeshBasicNodeMaterial({
+      color: new THREE.Color("#78A0F7")
+    });
     
     const dotGeo = new THREE.PlaneGeometry(0.01, 0.01);
 
     const dots = new THREE.InstancedMesh(dotGeo, dotMat, pointsNumber);
-    const dummy = new THREE.Object3D();
+    const obj = new THREE.Object3D();
 
     for (let i = 0; i < positions.length; i++) {
       const pos = new THREE.Vector3(
@@ -36,10 +37,10 @@ class App extends Base {
       	positions[i][2],
       );
       
-      dummy.position.copy(pos);
-      dummy.lookAt(pos.multiplyScalar(2));
-      dummy.updateMatrix();
-      dots.setMatrixAt(i, dummy.matrix);
+      obj.position.copy(pos);
+      obj.lookAt(pos.multiplyScalar(2));
+      obj.updateMatrix();
+      dots.setMatrixAt(i, obj.matrix);
     }
 
     dots.instanceMatrix.needsUpdate = true;
@@ -54,26 +55,11 @@ class App extends Base {
 new App();
 `;
 
-const vertex = `precision highp float;
-varying vec3 vNormal;
-
-void main() {
-  vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-  gl_Position = projectionMatrix * mvPosition;
-
-  vNormal = normal;
-}
-`
-
 const files = {
-	"/index.ts": {
-		code: index,
-		hidden: false,
-	},
-  "/vertex.glsl": {
-    code: vertex,
+  "/index.ts": {
+    code: index,
     hidden: false,
-  }
+  },
 };
 
 export default files;

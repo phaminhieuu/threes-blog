@@ -13,6 +13,11 @@ import Tabs, { type Tab } from "./components/tabs";
 import setupFiles from "./setup-files";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 
 interface Props {
   template: SandpackPredefinedTemplate;
@@ -27,6 +32,8 @@ export const theme: SandpackThemeProp = {
     surface1: "var(--color-background)",
     surface2: "var(--color-border)",
     surface3: "var(--color-background)",
+    hover: "var(--color-foreground)",
+    clickable: "var(--color-muted-foreground)",
     accent: "var(--color-primary)",
     error: "var(--color-destructive)",
     errorSurface: "var(--color-background)",
@@ -47,6 +54,7 @@ export const theme: SandpackThemeProp = {
   },
   font: {
     size: "14px",
+    lineHeight: "20px",
   },
 };
 
@@ -67,9 +75,9 @@ export default function Sandpack(props: Props) {
 
   return (
     <div
-      className={cn("", {
+      className={cn("bg-background", {
         "fixed inset-0 z-50": isFullScreen,
-        "relative lg:w-[calc(100%+320px)] lg:-mx-[160px]": !isFullScreen,
+        "relative lg:w-[calc(100%+400px)] lg:-mx-[200px]": !isFullScreen,
       })}
     >
       <SandpackProvider
@@ -83,15 +91,20 @@ export default function Sandpack(props: Props) {
           entry: "/index.html",
           dependencies,
         }}
-        options={{ autorun }}
+        options={{
+          autorun,
+        }}
       >
         <SandpackLayout
           style={{
             borderRadius: "8px",
           }}
         >
-          <div className="w-full flex flex-col lg:flex-row flex-nowrap overflow-hidden">
-            <div className="w-full lg:w-1/2">
+          <ResizablePanelGroup
+            direction="horizontal"
+            className="w-full flex flex-col lg:flex-row flex-nowrap overflow-hidden"
+          >
+            <ResizablePanel className="w-full lg:w-1/2">
               <SandpackCodeEditor
                 showTabs
                 showLineNumbers
@@ -101,9 +114,9 @@ export default function Sandpack(props: Props) {
                   height: isFullScreen ? "100vh" : EDITOR_HEIGHT,
                 }}
               />
-            </div>
-
-            <div className="w-full lg:w-1/2 lg:border-l border-t lg:border-t-0 shrink-0">
+            </ResizablePanel>
+            <ResizableHandle />
+            <ResizablePanel className="w-full lg:w-1/2 lg:border-l border-t lg:border-t-0">
               <Tabs
                 currentTab={tab}
                 onTabChange={setTab}
@@ -132,8 +145,8 @@ export default function Sandpack(props: Props) {
                   display: tab === "console" ? "flex" : "none",
                 }}
               />
-            </div>
-          </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
         </SandpackLayout>
       </SandpackProvider>
     </div>

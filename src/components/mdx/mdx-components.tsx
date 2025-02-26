@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Image from "./image";
 
 const Callout = dynamic(() => import("./callout"));
 const CodeLine = dynamic(() => import("./code/code-line"));
@@ -17,6 +18,7 @@ const customComponents = {
 const MDXComponents = {
   pre: CodeBlock,
   code: CodeLine,
+  Image,
   ...customComponents,
 };
 

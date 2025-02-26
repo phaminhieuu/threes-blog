@@ -63,7 +63,7 @@ export const TabBtn = ({
 			className={cn(
 				"hover:text-foreground transition-colors cursor-pointer px-2 text-muted-foreground font-inter",
 				{
-					"text-primary": currentTab === tab,
+					"text-primary hover:text-primary": currentTab === tab,
 				},
 			)}
 			onClick={() => onTabChange(tab)}

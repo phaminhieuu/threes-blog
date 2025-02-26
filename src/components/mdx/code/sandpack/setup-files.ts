@@ -18,14 +18,14 @@ const css = `body {
 }
 `;
 
-const base = `import * as THREE from "three";
+const base = `import * as THREE from "three/webgpu";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 
 export class Base {
   protected clock: THREE.Clock;
   public camera: THREE.PerspectiveCamera;
   public scene: THREE.Scene;
-  public renderer: THREE.WebGLRenderer;
+  public renderer: THREE.WebGPURenderer;
   public controls: OrbitControls;
   
   constructor() {
@@ -37,7 +37,7 @@ export class Base {
     this.camera.position.set( 0, 0, 5 );
 
     // Renderer
-    this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+    this.renderer = new THREE.WebGPURenderer( { antialias: true } );
     this.renderer.setPixelRatio( window.devicePixelRatio );
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     this.renderer.setAnimationLoop( this.tick.bind( this ) );
@@ -72,17 +72,17 @@ export class Base {
 `;
 
 const setupFiles = {
-  // "/index.html": {
-  // 	code: indexHtml,
-  //    hidden: true,
-  // },
+  "/index.html": {
+    code: indexHtml,
+    hidden: true,
+  },
   "/styles.css": {
     code: css,
     hidden: true,
   },
   "/base.ts": {
     code: base,
-    hidden: true,
+    hidden: false,
   },
 };
 

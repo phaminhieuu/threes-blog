@@ -1,0 +1,110 @@
+---
+title: Spring animation
+slug: spring-animation
+date: 2025-02-27T08:00:00.000Z
+---
+
+Spring animation is a fascinating technique rooted in physics that brings smooth, natural motion to digital interfaces. This article aims to explain how a spring animation work , the laws of physics that are behind it, and the relation between the different options you can set for a spring animation.
+
+## The Physics of Springs
+
+At its core, spring animation is driven by `Hooke’s Law`, which defines the force a spring exerts:
+
+```js
+F = -k * x;
+```
+
+- `F` is the force the spring uses to pull itself back.
+- `k` is the spring’s stiffness—think of it as how stubborn the spring is. A big k means a stiff, tight bounce; a small k gives you a soft, wobbly vibe.
+- `x` is how far the spring is stretched or compressed from its comfy, neutral position. (`x = x_target - x_current`)
+
+The negative sign indicates that the force is always directed opposite to the displacement, pulling the spring back to its rest position.
+That's mean:
+
+- If we pull the spring ( `x > 0` ) to a certain distance away from its rest position, it will start to move back to its rest position.
+- If we don't pull the spring ( `x = 0` ), the spring will stay in its rest position.
+
+While Hooke’s Law defines the restoring force of a spring based on displacement and stiffness, force also connects to `Newton’s Second Law`:
+
+```js
+F = m * a;
+```
+
+where `m` is the mass and `a` is the acceleration of the object.
+
+Besides, there is a damping force that resists the motion of the object. The damping force is proportional to the velocity of the object:
+
+```js
+F_damping = -d * v;
+```
+
+where `b` is the damping coefficient and `v` is the velocity of the object.
+
+Combine these, we have the equation:
+
+```js
+F = F_spring + F_damping = m * a
+
+-k * x - d * v = m * a
+```
+
+and we can solve it to get the acceleration:
+
+```js
+a = (-k * x - d * v) / m;
+```
+
+Ok, now we have the acceleration, we can integrate it to get the velocity and position of the object at each time step.
+
+To calculate the velocity, we can use the following equation:
+
+```js
+v = v + a * dt;
+```
+
+where `v` is the velocity, `a` is the acceleration, and `dt` is the time step.
+
+And finally the position:
+
+```js
+p2 = p1 + v * dt;
+```
+
+where `p2` is the new position, `p1` is the old position, `v` is the velocity, and `dt` is the time step.
+
+The `dt` is the time step, which is the time between each frame, called **frame per second** (FPS). Usually, it's 60 frames per second, which means `dt = 1 / 60`.
+
+## Apply to code
+
+Now, we can use the above equations to create a spring animation in code. Here is an example of a spring animation in JavaScript:
+
+```js
+const stiffness = 300;
+const damping = 20;
+const mass = 1;
+const frameRate = 1 / 60;
+
+const spring = () => {
+  let x = 0;
+  let v = 0;
+  let a = 0;
+
+  const update = () => {
+    const F_spring = -stiffness * x;
+    const F_damping = -damping * v;
+    const F = F_spring + F_damping;
+    a = F / mass;
+
+    v = v + a * frameRate;
+    x = x + v * frameRate;
+
+    return x;
+  };
+
+  return update;
+};
+```
+
+This is the playground where you can play with the spring animation. You can adjust the stiffness, damping, and mass to see how they affect the spring animation.
+
+<SpringVisualizer />

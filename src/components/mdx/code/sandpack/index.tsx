@@ -13,11 +13,6 @@ import Tabs, { type Tab } from "./components/tabs";
 import setupFiles from "./setup-files";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 
 interface Props {
   template: SandpackPredefinedTemplate;
@@ -100,11 +95,8 @@ export default function Sandpack(props: Props) {
             borderRadius: "8px",
           }}
         >
-          <ResizablePanelGroup
-            direction="horizontal"
-            className="w-full flex flex-col lg:flex-row flex-nowrap overflow-hidden"
-          >
-            <ResizablePanel className="w-full lg:w-1/2">
+          <div className="w-full flex flex-col lg:flex-row flex-nowrap overflow-hidden">
+            <div className="lg:w-1/2">
               <SandpackCodeEditor
                 showTabs
                 showLineNumbers
@@ -114,9 +106,8 @@ export default function Sandpack(props: Props) {
                   height: isFullScreen ? "100vh" : EDITOR_HEIGHT,
                 }}
               />
-            </ResizablePanel>
-            <ResizableHandle />
-            <ResizablePanel className="w-full lg:w-1/2 lg:border-l border-t lg:border-t-0">
+            </div>
+            <div className="lg:w-1/2 lg:border-l border-t lg:border-t-0">
               <Tabs
                 currentTab={tab}
                 onTabChange={setTab}
@@ -145,8 +136,8 @@ export default function Sandpack(props: Props) {
                   display: tab === "console" ? "flex" : "none",
                 }}
               />
-            </ResizablePanel>
-          </ResizablePanelGroup>
+            </div>
+          </div>
         </SandpackLayout>
       </SandpackProvider>
     </div>

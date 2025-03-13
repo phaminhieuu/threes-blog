@@ -1,6 +1,5 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import { Fira_Code, Inter } from "next/font/google";
 import Background from "@/components/background";
 import Footer from "@/components/footer";
 import localFont from "next/font/local";
@@ -8,11 +7,6 @@ import localFont from "next/font/local";
 const fontText = localFont({
   src: "../styles/fonts/Font-Text-400-Trial.ttf",
   display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
